@@ -78,17 +78,18 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/toggleStart"
             style="?attr/materialButtonOutlinedStyle"
-
+            app:icon="@drawable/play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/toggle_start"/>
+            />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/toggleStop"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/toggle_stop" />
+            app:icon="@drawable/stop"
+            />
 
     </com.google.android.material.button.MaterialButtonToggleGroup>
 

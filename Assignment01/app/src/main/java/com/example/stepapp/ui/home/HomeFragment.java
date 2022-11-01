@@ -43,7 +43,7 @@ public class HomeFragment extends Fragment {
     private SensorManager mSensorManager;
 
     // Step Detector sensor
-
+    private Sensor mSensorStepDetector;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -58,7 +58,7 @@ public class HomeFragment extends Fragment {
         mSensorManager=(SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         mSensorACC=mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         // instance of the sensor manager for the step detector
-
+        mSensorStepDetector=mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         // TODO 11
         // instantiate the StepCounterListener
         listener = new StepCounterListener(stepsCountTextView,stepsCountProgressBar);
@@ -81,7 +81,11 @@ public class HomeFragment extends Fragment {
                         Toast.makeText(getContext(),R.string.acc_not_available,Toast.LENGTH_SHORT).show();
                     }
                     // Check if the Step detector sensor exists
-
+                    if(mSensorStepDetector!=null){
+                        mSensorManager.registerListener(listener,mSensorStepDetector,SensorManager.SENSOR_DELAY_NORMAL);
+                    }else{
+                        Toast.makeText(getContext(),R.string.step_not_available,Toast.LENGTH_SHORT);
+                    }
 
 
                 } else if (group.getCheckedButtonId() == R.id.toggleStop) {
@@ -177,9 +181,9 @@ class StepCounterListener implements SensorEventListener {
             break;
 
             // case Step detector
-
+            case Sensor.TYPE_STEP_DETECTOR:
             // Calculate the number of steps
-
+            countSteps(event.values[0]);
         }
     }
 
@@ -236,9 +240,10 @@ class StepCounterListener implements SensorEventListener {
 
     // Calculate the number of steps from the step detector
     private void countSteps(float step) {
-
-
-
+        mAndroidStepCount+=(int)step;
+        Log.d("NUM STEPS ANDROID","Num.steps: "+String.valueOf(mAndroidStepCount));
+        stepsCountTextView.setText(String.valueOf(mAndroidStepCount));
+        stepsCountProgressBar.setProgress(mAndroidStepCount);
     }
 }
 
